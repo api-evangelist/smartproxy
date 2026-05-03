@@ -1,0 +1,36 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.decodo.com/v1/users/12345/sub-users",
+    "headers": {
+      "Authorization": "Bearer myApiToken123",
+      "Content-Type": "application/json"
+    }
+  },
+  "response": {
+    "statusCode": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": [
+      {
+        "id": "sub-001",
+        "username": "scraper-bot-1",
+        "service_type": "residential",
+        "traffic_limit": 50.0,
+        "traffic_used": 23.7,
+        "status": "active",
+        "created": "2026-01-15T10:00:00Z"
+      },
+      {
+        "id": "sub-002",
+        "username": "datacenter-worker",
+        "service_type": "datacenter",
+        "traffic_limit": null,
+        "traffic_used": 145.2,
+        "status": "active",
+        "created": "2025-11-20T08:30:00Z"
+      }
+    ]
+  }
+}

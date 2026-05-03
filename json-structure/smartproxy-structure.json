@@ -1,0 +1,64 @@
+{
+  "title": "Smartproxy API Structure",
+  "description": "Hierarchical structure of the Smartproxy account management API resources",
+  "structure": {
+    "account": {
+      "description": "A Smartproxy primary account with authentication and subscriptions",
+      "type": "entity",
+      "children": {
+        "subscriptions": {
+          "description": "Active proxy service subscriptions",
+          "type": "collection",
+          "children": {
+            "subscription": {
+              "description": "A single subscription plan with traffic limits and validity dates",
+              "type": "entity",
+              "properties": ["id", "plan_name", "service_type", "status", "traffic_limit", "traffic_used", "valid_from", "valid_until"]
+            }
+          }
+        },
+        "sub-users": {
+          "description": "Proxy sub-user accounts for traffic isolation and access control",
+          "type": "collection",
+          "children": {
+            "sub-user": {
+              "description": "A proxy user account with its own credentials and traffic allocation",
+              "type": "entity",
+              "properties": ["id", "username", "service_type", "traffic_limit", "traffic_used", "status", "created"],
+              "children": {
+                "traffic": {
+                  "description": "Traffic usage metrics for this sub-user",
+                  "type": "report",
+                  "properties": ["traffic_used", "traffic_limit", "requests_count", "period_start", "period_end"]
+                }
+              }
+            }
+          }
+        },
+        "whitelisted-ips": {
+          "description": "IP addresses allowed to authenticate with proxies without credentials",
+          "type": "collection",
+          "children": {
+            "whitelisted-ip": {
+              "description": "A single whitelisted IP address record",
+              "type": "entity",
+              "properties": ["id", "ip_address", "created"]
+            }
+          }
+        }
+      }
+    },
+    "endpoints": {
+      "description": "Available proxy server endpoints for connection",
+      "type": "catalog",
+      "children": {
+        "endpoint": {
+          "description": "A proxy server endpoint with connection details",
+          "type": "entity",
+          "properties": ["host", "port", "type", "location", "protocol"],
+          "types": ["random", "sticky", "datacenter", "mobile"]
+        }
+      }
+    }
+  }
+}

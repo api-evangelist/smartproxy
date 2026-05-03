@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://api.decodo.com/v1/users/12345/sub-users",
+    "headers": {
+      "Authorization": "Bearer myApiToken123",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "username": "mobile-scraper-prod",
+      "password": "SecurePass@2026",
+      "service_type": "mobile",
+      "traffic_limit": 25.0
+    }
+  },
+  "response": {
+    "statusCode": 201,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": "sub-003",
+      "username": "mobile-scraper-prod",
+      "service_type": "mobile",
+      "traffic_limit": 25.0,
+      "traffic_used": 0.0,
+      "status": "active",
+      "created": "2026-05-02T12:00:00Z"
+    }
+  }
+}

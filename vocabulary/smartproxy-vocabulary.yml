@@ -1,0 +1,145 @@
+title: Smartproxy Vocabulary
+description: >-
+  Core terminology and concepts for the Smartproxy proxy network platform,
+  encompassing proxy types, connection modes, account management, and web
+  scraping infrastructure concepts.
+created: '2026-05-02'
+modified: '2026-05-02'
+terms:
+  - term: Proxy
+    definition: >-
+      An intermediary server that routes internet traffic on behalf of a client,
+      masking the client's original IP address. Smartproxy offers residential,
+      datacenter, mobile, and ISP proxy types.
+    related:
+      - IP Address
+      - Anonymity
+      - Web Scraping
+
+  - term: Residential Proxy
+    definition: >-
+      A proxy using IP addresses assigned to real residential internet users
+      by ISPs. Residential proxies appear as legitimate user traffic and have
+      high success rates on websites with anti-bot measures.
+    related:
+      - ISP
+      - IP Rotation
+      - Web Scraping
+
+  - term: Datacenter Proxy
+    definition: >-
+      A proxy using IP addresses from cloud or hosting provider data centers.
+      Datacenter proxies are fast and affordable but can be more easily
+      detected and blocked by sophisticated anti-bot systems.
+    related:
+      - Cloud
+      - High Speed
+      - Bulk Scraping
+
+  - term: Mobile Proxy
+    definition: >-
+      A proxy using IP addresses from mobile networks (3G/4G/5G), providing
+      high trust scores as mobile IPs are rarely blocked. Used for accessing
+      mobile-specific content and geo-targeted data.
+    related:
+      - Mobile Networks
+      - 4G
+      - Geo-Targeting
+
+  - term: ISP Proxy
+    definition: >-
+      A proxy that combines the legitimacy of residential IPs with the speed
+      of datacenter proxies, using static IPs sourced from internet service
+      providers. Ideal for tasks requiring both trust and performance.
+    related:
+      - Residential Proxy
+      - Datacenter Proxy
+      - Static IP
+
+  - term: Sub-User
+    definition: >-
+      A child account within a primary Smartproxy account used for segmenting
+      proxy access, setting individual traffic limits, and isolating proxy
+      usage by team, project, or application.
+    related:
+      - Account Management
+      - Traffic Allocation
+
+  - term: Rotating Proxy
+    definition: >-
+      A proxy configuration that automatically assigns a new IP address from
+      the proxy pool for each request (random mode) or at the start of each
+      new session. Enables large-scale data collection without IP bans.
+    aliases:
+      - Random Proxy
+    related:
+      - IP Rotation
+      - Session Management
+
+  - term: Sticky Session
+    definition: >-
+      A proxy configuration that maintains the same IP address for the duration
+      of a session, enabling stateful browsing, login sessions, and multi-step
+      workflows that require IP consistency.
+    aliases:
+      - Sticky Proxy
+    related:
+      - Session Management
+      - Login
+
+  - term: IP Whitelisting
+    definition: >-
+      A proxy authentication method where specific IP addresses are pre-authorized
+      to use proxies without providing username and password credentials on each
+      connection. Simplifies authentication for server-based scrapers.
+    related:
+      - Authentication
+      - IP Address
+
+  - term: Traffic Limit
+    definition: >-
+      A configurable cap on the amount of data (in GB) a sub-user can consume
+      through Smartproxy services within a billing period. Used for cost control
+      and resource allocation across teams.
+    related:
+      - Sub-User
+      - Billing
+      - Data Usage
+
+  - term: Endpoint
+    definition: >-
+      A proxy server connection point identified by a hostname and port. Smartproxy
+      provides endpoints for different proxy types (random, sticky, datacenter)
+      and geographic locations.
+    related:
+      - Proxy
+      - Host
+      - Port
+
+  - term: Backconnect Proxy
+    definition: >-
+      A type of proxy endpoint where a single host:port combination routes
+      requests through a rotating pool of proxy IPs on the backend. The client
+      connects to one address while Smartproxy routes through many IPs.
+    related:
+      - Rotating Proxy
+      - Endpoint
+
+  - term: Web Scraping
+    definition: >-
+      The automated extraction of data from websites using HTTP requests and
+      HTML parsing. Smartproxy provides proxy infrastructure to enable
+      large-scale web scraping without IP blocks or rate limiting.
+    related:
+      - Data Collection
+      - HTML Parsing
+      - Bot Traffic
+
+  - term: SOCKS5
+    definition: >-
+      A proxy protocol that operates at the transport layer, supporting TCP
+      and UDP traffic. SOCKS5 proxies are more versatile than HTTP proxies
+      and can handle any type of internet traffic.
+    related:
+      - HTTP Proxy
+      - Protocol

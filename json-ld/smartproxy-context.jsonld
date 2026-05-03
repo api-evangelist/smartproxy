@@ -1,0 +1,56 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "smartproxy": "https://api-evangelist.github.io/smartproxy/vocab#",
+
+    "name": "schema:name",
+    "description": "schema:description",
+    "url": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "created": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+
+    "ProxyAccount": "schema:Account",
+    "SubUser": "schema:Person",
+    "username": "schema:name",
+    "status": {
+      "@id": "smartproxy:status",
+      "@type": "xsd:string"
+    },
+    "serviceType": {
+      "@id": "smartproxy:serviceType",
+      "@type": "xsd:string"
+    },
+
+    "ProxyEndpoint": "schema:EntryPoint",
+    "host": "schema:url",
+    "port": {
+      "@id": "schema:portableDevice",
+      "@type": "xsd:integer"
+    },
+    "protocol": "schema:encodingFormat",
+    "location": "schema:addressCountry",
+
+    "Subscription": "schema:Offer",
+    "trafficLimit": {
+      "@id": "smartproxy:trafficLimit",
+      "@type": "schema:QuantitativeValue"
+    },
+    "trafficUsed": {
+      "@id": "smartproxy:trafficUsed",
+      "@type": "schema:QuantitativeValue"
+    },
+
+    "WhitelistedIp": "schema:DefinedTerm",
+    "ipAddress": {
+      "@id": "smartproxy:ipAddress",
+      "@type": "xsd:string"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+extends: spectral:oas
+rules:
+  smartproxy-operation-id-camel-case:
+    description: Operation IDs must use camelCase
+    message: "Operation ID '{{value}}' should use camelCase (e.g., getSubUsers)"
+    severity: warn
+    given: "$.paths[*][*].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]+$"
+
+  smartproxy-user-id-path-param:
+    description: User-scoped endpoints must use {userId} path parameter
+    message: "User-scoped endpoints should use {userId}"
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^\\/users(\\/\\{userId\\}|$)|^\\/auth|^\\/endpoints"
+
+  smartproxy-operation-summary-title-case:
+    description: Operation summaries must use Title Case
+    message: "Summary '{{value}}' should use Title Case"
+    severity: warn
+    given: "$.paths[*][*].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][A-Za-z]*(\\s[A-Z][A-Za-z]*)*$"
+
+  smartproxy-response-200-get:
+    description: All GET operations must define a 200 response
+    message: "GET operations must define a 200 success response"
+    severity: error
+    given: "$.paths[*].get"
+    then:
+      field: responses.200
+      function: truthy
+
+  smartproxy-tags-required:
+    description: All operations must have at least one tag
+    message: "Operation must include at least one tag"
+    severity: error
+    given: "$.paths[*][*]"
+    then:
+      field: tags
+      function: truthy
+
+  smartproxy-delete-returns-204:
+    description: DELETE operations should return 204 No Content
+    message: "DELETE operations should define a 204 response"
+    severity: warn
+    given: "$.paths[*].delete"
+    then:
+      field: responses.204
+      function: truthy

@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api-evangelist.github.io/smartproxy/json-schema/smartproxy-sub-user-schema.json",
+  "title": "Smartproxy Sub-User",
+  "description": "A proxy sub-user account used for proxy authentication and traffic allocation within a Smartproxy account.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique sub-user identifier"
+    },
+    "username": {
+      "type": "string",
+      "description": "Username used for proxy authentication"
+    },
+    "service_type": {
+      "type": "string",
+      "enum": ["residential", "datacenter", "mobile", "isp"],
+      "description": "Proxy service type assigned to this sub-user"
+    },
+    "traffic_limit": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Traffic limit in GB, null for unlimited"
+    },
+    "traffic_used": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Traffic consumed in GB during the current billing period"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "suspended", "deleted"],
+      "description": "Current account status"
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Account creation timestamp"
+    }
+  },
+  "required": ["username", "service_type"]
+}

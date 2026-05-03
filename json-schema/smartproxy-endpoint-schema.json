@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api-evangelist.github.io/smartproxy/json-schema/smartproxy-endpoint-schema.json",
+  "title": "Smartproxy Endpoint",
+  "description": "A proxy server endpoint including hostname, port, type, location, and supported protocol.",
+  "type": "object",
+  "properties": {
+    "host": {
+      "type": "string",
+      "description": "Proxy server hostname or IP address"
+    },
+    "port": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 65535,
+      "description": "Proxy server port number"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["random", "sticky", "datacenter", "mobile"],
+      "description": "Connection type - random (rotating) or sticky (session-persistent)"
+    },
+    "location": {
+      "type": "string",
+      "description": "Geographic location identifier (ISO country code or city name)"
+    },
+    "protocol": {
+      "type": "string",
+      "enum": ["HTTP", "HTTPS", "SOCKS5"],
+      "description": "Supported proxy protocol"
+    }
+  },
+  "required": ["host", "port", "type", "protocol"]
+}
