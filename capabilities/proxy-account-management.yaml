@@ -1,306 +1,523 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
   label: Smartproxy Proxy Account Management
-  description: >-
-    Unified workflow capability for managing Smartproxy proxy accounts at scale.
-    Enables DevOps teams, data engineers, and web scraping operations to
-    programmatically manage proxy sub-users, monitor traffic consumption,
-    configure IP whitelisting, and discover available proxy endpoints across
-    residential, datacenter, mobile, and ISP proxy networks.
+  description: Unified workflow capability for managing Smartproxy proxy accounts at scale. Enables DevOps teams, data engineers,
+    and web scraping operations to programmatically manage proxy sub-users, monitor traffic consumption, configure IP whitelisting,
+    and discover available proxy endpoints across residential, datacenter, mobile, and ISP proxy networks.
   tags:
-    - Smartproxy
-    - Proxies
-    - Web Scraping
-    - Data Collection
-    - Account Management
-    - Traffic Management
-  created: "2026-05-02"
-  modified: "2026-05-02"
-
+  - Smartproxy
+  - Proxies
+  - Web Scraping
+  - Data Collection
+  - Account Management
+  - Traffic Management
+  created: '2026-05-02'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      SMARTPROXY_API_KEY: SMARTPROXY_API_KEY
-      SMARTPROXY_USER_ID: SMARTPROXY_USER_ID
-
+- namespace: env
+  keys:
+    SMARTPROXY_API_KEY: SMARTPROXY_API_KEY
+    SMARTPROXY_USER_ID: SMARTPROXY_USER_ID
 capability:
   consumes:
-    - import: smartproxy
-      location: ./shared/smartproxy.yaml
-
+  - type: http
+    namespace: smartproxy
+    baseUri: https://api.decodo.com/v1
+    description: Smartproxy/Decodo account management API
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{SMARTPROXY_API_KEY}}'
+      placement: header
+    resources:
+    - name: sub-users
+      path: /users/{userId}/sub-users
+      description: Manage proxy sub-user accounts
+      operations:
+      - name: get-sub-users
+        method: GET
+        description: List all proxy sub-users
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+          description: Primary account user ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+      - name: create-sub-user
+        method: POST
+        description: Create a new proxy sub-user account
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        body:
+          type: json
+          data:
+            username: '{{tools.username}}'
+            password: '{{tools.password}}'
+            service_type: '{{tools.service_type}}'
+            traffic_limit: '{{tools.traffic_limit}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: update-sub-user
+        method: PUT
+        description: Update a sub-user's traffic limit or password
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        body:
+          type: json
+          data:
+            password: '{{tools.password}}'
+            traffic_limit: '{{tools.traffic_limit}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: sub-user
+      path: /users/{userId}/sub-users/{subUserId}
+      description: Manage specific sub-user
+      operations:
+      - name: delete-sub-user
+        method: DELETE
+        description: Permanently delete a proxy sub-user
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        - name: subUserId
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: sub-user-traffic
+      path: /users/{userId}/sub-users/{username}/traffic
+      description: Monitor sub-user traffic usage
+      operations:
+      - name: get-sub-user-traffic
+        method: GET
+        description: Get traffic usage for a specific sub-user
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        - name: username
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: allocated-traffic
+      path: /users/{userId}/allocated-traffic
+      description: Monitor overall traffic allocation
+      operations:
+      - name: get-allocated-traffic
+        method: GET
+        description: Get total allocated traffic across all sub-users
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: whitelisted-ips
+      path: /users/{userId}/whitelisted-ips
+      description: Manage IP whitelist for proxy authentication
+      operations:
+      - name: get-whitelisted-ips
+        method: GET
+        description: List all whitelisted IP addresses
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+      - name: add-whitelisted-ips
+        method: POST
+        description: Add IP addresses to the authentication whitelist
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        body:
+          type: json
+          data:
+            IPAddressList: '{{tools.ip_addresses}}'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: whitelisted-ip
+      path: /users/{userId}/whitelisted-ips/{id}
+      description: Manage specific whitelisted IP
+      operations:
+      - name: delete-whitelisted-ip
+        method: DELETE
+        description: Remove an IP from the whitelist
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: subscriptions
+      path: /users/{userId}/subscriptions
+      description: View subscription details
+      operations:
+      - name: get-subscriptions
+        method: GET
+        description: Get active subscription plans and limits
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+    - name: endpoints
+      path: /endpoints
+      description: Discover proxy endpoints
+      operations:
+      - name: get-endpoints
+        method: GET
+        description: List all available proxy endpoints
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
+    - name: endpoints-by-type
+      path: /endpoints/{type}
+      description: Get endpoints filtered by type
+      operations:
+      - name: get-endpoints-by-type
+        method: GET
+        description: Get proxy endpoints by connection type
+        inputParameters:
+        - name: type
+          in: path
+          type: string
+          required: true
+          description: Endpoint type (random, sticky, datacenter, mobile)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: array
+          value: $.
   exposes:
-    - type: rest
-      port: 8080
-      namespace: smartproxy-account-api
-      description: Unified REST API for proxy account and traffic management.
-      resources:
-        - path: /v1/sub-users
-          name: sub-users
-          description: Manage proxy sub-user accounts
-          operations:
-            - method: GET
-              name: get-sub-users
-              description: List all proxy sub-user accounts
-              call: "smartproxy.get-sub-users"
-              with:
-                userId: "rest.userId"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-            - method: POST
-              name: create-sub-user
-              description: Create a new proxy sub-user
-              call: "smartproxy.create-sub-user"
-              with:
-                userId: "rest.userId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/sub-users/{subUserId}
-          name: sub-user
-          description: Manage specific sub-user
-          operations:
-            - method: DELETE
-              name: delete-sub-user
-              description: Delete a proxy sub-user account
-              call: "smartproxy.delete-sub-user"
-              with:
-                userId: "rest.userId"
-                subUserId: "rest.subUserId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/sub-users/{username}/traffic
-          name: sub-user-traffic
-          description: Traffic usage monitoring
-          operations:
-            - method: GET
-              name: get-sub-user-traffic
-              description: Get traffic usage for a specific sub-user
-              call: "smartproxy.get-sub-user-traffic"
-              with:
-                userId: "rest.userId"
-                username: "rest.username"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/traffic
-          name: traffic
-          description: Overall traffic allocation
-          operations:
-            - method: GET
-              name: get-allocated-traffic
-              description: Get total traffic allocation across all sub-users
-              call: "smartproxy.get-allocated-traffic"
-              with:
-                userId: "rest.userId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/whitelisted-ips
-          name: whitelisted-ips
-          description: IP whitelist management
-          operations:
-            - method: GET
-              name: get-whitelisted-ips
-              description: List all whitelisted IP addresses
-              call: "smartproxy.get-whitelisted-ips"
-              with:
-                userId: "rest.userId"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-            - method: POST
-              name: add-whitelisted-ips
-              description: Add IP addresses to the whitelist
-              call: "smartproxy.add-whitelisted-ips"
-              with:
-                userId: "rest.userId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/subscriptions
-          name: subscriptions
-          description: Subscription management
-          operations:
-            - method: GET
-              name: get-subscriptions
-              description: Get active subscription plans and usage limits
-              call: "smartproxy.get-subscriptions"
-              with:
-                userId: "rest.userId"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-        - path: /v1/endpoints
-          name: endpoints
-          description: Proxy endpoint discovery
-          operations:
-            - method: GET
-              name: get-endpoints
-              description: List all available proxy endpoints
-              call: "smartproxy.get-endpoints"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-        - path: /v1/endpoints/{type}
-          name: endpoints-by-type
-          description: Filtered endpoint discovery
-          operations:
-            - method: GET
-              name: get-endpoints-by-type
-              description: Get proxy endpoints filtered by type
-              call: "smartproxy.get-endpoints-by-type"
-              with:
-                type: "rest.type"
-              outputParameters:
-                - type: array
-                  mapping: "$."
-
-    - type: mcp
-      port: 9090
-      namespace: smartproxy-account-mcp
-      transport: http
-      description: MCP server for AI-assisted proxy account and traffic management.
-      tools:
-        - name: list-proxy-sub-users
-          description: List all proxy sub-user accounts with their service types and traffic status
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "smartproxy.get-sub-users"
-          with:
-            userId: "tools.userId"
-          outputParameters:
-            - type: array
-              mapping: "$."
-        - name: create-proxy-sub-user
-          description: Create a new proxy sub-user with specified service type and optional traffic limit
-          hints:
-            readOnly: false
-            idempotent: false
-          call: "smartproxy.create-sub-user"
-          with:
-            userId: "tools.userId"
-            username: "tools.username"
-            password: "tools.password"
-            service_type: "tools.service_type"
-            traffic_limit: "tools.traffic_limit"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: update-proxy-sub-user
-          description: Update a proxy sub-user's password or traffic limit
-          hints:
-            readOnly: false
-            idempotent: true
-          call: "smartproxy.update-sub-user"
-          with:
-            userId: "tools.userId"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: delete-proxy-sub-user
-          description: Permanently delete a proxy sub-user account
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "smartproxy.delete-sub-user"
-          with:
-            userId: "tools.userId"
-            subUserId: "tools.subUserId"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-sub-user-traffic
-          description: Get traffic consumption metrics for a specific proxy sub-user
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "smartproxy.get-sub-user-traffic"
-          with:
-            userId: "tools.userId"
-            username: "tools.username"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-total-traffic-allocation
-          description: Get total traffic GB allocated and consumed across all sub-users
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "smartproxy.get-allocated-traffic"
-          with:
-            userId: "tools.userId"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-whitelisted-ips
-          description: List all IP addresses whitelisted for credential-free proxy authentication
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "smartproxy.get-whitelisted-ips"
-          with:
-            userId: "tools.userId"
-          outputParameters:
-            - type: array
-              mapping: "$."
-        - name: add-whitelisted-ips
-          description: Add one or more IP addresses to the proxy authentication whitelist
-          hints:
-            readOnly: false
-            idempotent: true
-          call: "smartproxy.add-whitelisted-ips"
-          with:
-            userId: "tools.userId"
-            ip_addresses: "tools.ip_addresses"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: remove-whitelisted-ip
-          description: Remove an IP address from the proxy authentication whitelist
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "smartproxy.delete-whitelisted-ip"
-          with:
-            userId: "tools.userId"
-            id: "tools.id"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-subscriptions
-          description: Get active subscription plans, traffic limits, and validity dates
-          hints:
-            readOnly: true
-            openWorld: false
-          call: "smartproxy.get-subscriptions"
-          with:
-            userId: "tools.userId"
-          outputParameters:
-            - type: array
-              mapping: "$."
-        - name: list-proxy-endpoints
-          description: List all available proxy endpoints with hostnames, ports, and protocols
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "smartproxy.get-endpoints"
-          outputParameters:
-            - type: array
-              mapping: "$."
-        - name: list-proxy-endpoints-by-type
-          description: Get proxy endpoints filtered by connection type (random, sticky, datacenter, mobile)
-          hints:
-            readOnly: true
-            openWorld: true
-          call: "smartproxy.get-endpoints-by-type"
-          with:
-            type: "tools.type"
-          outputParameters:
-            - type: array
-              mapping: "$."
+  - type: rest
+    port: 8080
+    namespace: smartproxy-account-api
+    description: Unified REST API for proxy account and traffic management.
+    resources:
+    - path: /v1/sub-users
+      name: sub-users
+      description: Manage proxy sub-user accounts
+      operations:
+      - method: GET
+        name: get-sub-users
+        description: List all proxy sub-user accounts
+        call: smartproxy.get-sub-users
+        with:
+          userId: rest.userId
+        outputParameters:
+        - type: array
+          mapping: $.
+      - method: POST
+        name: create-sub-user
+        description: Create a new proxy sub-user
+        call: smartproxy.create-sub-user
+        with:
+          userId: rest.userId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sub-users/{subUserId}
+      name: sub-user
+      description: Manage specific sub-user
+      operations:
+      - method: DELETE
+        name: delete-sub-user
+        description: Delete a proxy sub-user account
+        call: smartproxy.delete-sub-user
+        with:
+          userId: rest.userId
+          subUserId: rest.subUserId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/sub-users/{username}/traffic
+      name: sub-user-traffic
+      description: Traffic usage monitoring
+      operations:
+      - method: GET
+        name: get-sub-user-traffic
+        description: Get traffic usage for a specific sub-user
+        call: smartproxy.get-sub-user-traffic
+        with:
+          userId: rest.userId
+          username: rest.username
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/traffic
+      name: traffic
+      description: Overall traffic allocation
+      operations:
+      - method: GET
+        name: get-allocated-traffic
+        description: Get total traffic allocation across all sub-users
+        call: smartproxy.get-allocated-traffic
+        with:
+          userId: rest.userId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/whitelisted-ips
+      name: whitelisted-ips
+      description: IP whitelist management
+      operations:
+      - method: GET
+        name: get-whitelisted-ips
+        description: List all whitelisted IP addresses
+        call: smartproxy.get-whitelisted-ips
+        with:
+          userId: rest.userId
+        outputParameters:
+        - type: array
+          mapping: $.
+      - method: POST
+        name: add-whitelisted-ips
+        description: Add IP addresses to the whitelist
+        call: smartproxy.add-whitelisted-ips
+        with:
+          userId: rest.userId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/subscriptions
+      name: subscriptions
+      description: Subscription management
+      operations:
+      - method: GET
+        name: get-subscriptions
+        description: Get active subscription plans and usage limits
+        call: smartproxy.get-subscriptions
+        with:
+          userId: rest.userId
+        outputParameters:
+        - type: array
+          mapping: $.
+    - path: /v1/endpoints
+      name: endpoints
+      description: Proxy endpoint discovery
+      operations:
+      - method: GET
+        name: get-endpoints
+        description: List all available proxy endpoints
+        call: smartproxy.get-endpoints
+        outputParameters:
+        - type: array
+          mapping: $.
+    - path: /v1/endpoints/{type}
+      name: endpoints-by-type
+      description: Filtered endpoint discovery
+      operations:
+      - method: GET
+        name: get-endpoints-by-type
+        description: Get proxy endpoints filtered by type
+        call: smartproxy.get-endpoints-by-type
+        with:
+          type: rest.type
+        outputParameters:
+        - type: array
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: smartproxy-account-mcp
+    transport: http
+    description: MCP server for AI-assisted proxy account and traffic management.
+    tools:
+    - name: list-proxy-sub-users
+      description: List all proxy sub-user accounts with their service types and traffic status
+      hints:
+        readOnly: true
+        openWorld: false
+      call: smartproxy.get-sub-users
+      with:
+        userId: tools.userId
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: create-proxy-sub-user
+      description: Create a new proxy sub-user with specified service type and optional traffic limit
+      hints:
+        readOnly: false
+        idempotent: false
+      call: smartproxy.create-sub-user
+      with:
+        userId: tools.userId
+        username: tools.username
+        password: tools.password
+        service_type: tools.service_type
+        traffic_limit: tools.traffic_limit
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-proxy-sub-user
+      description: Update a proxy sub-user's password or traffic limit
+      hints:
+        readOnly: false
+        idempotent: true
+      call: smartproxy.update-sub-user
+      with:
+        userId: tools.userId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-proxy-sub-user
+      description: Permanently delete a proxy sub-user account
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: smartproxy.delete-sub-user
+      with:
+        userId: tools.userId
+        subUserId: tools.subUserId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-sub-user-traffic
+      description: Get traffic consumption metrics for a specific proxy sub-user
+      hints:
+        readOnly: true
+        openWorld: false
+      call: smartproxy.get-sub-user-traffic
+      with:
+        userId: tools.userId
+        username: tools.username
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-total-traffic-allocation
+      description: Get total traffic GB allocated and consumed across all sub-users
+      hints:
+        readOnly: true
+        openWorld: false
+      call: smartproxy.get-allocated-traffic
+      with:
+        userId: tools.userId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-whitelisted-ips
+      description: List all IP addresses whitelisted for credential-free proxy authentication
+      hints:
+        readOnly: true
+        openWorld: false
+      call: smartproxy.get-whitelisted-ips
+      with:
+        userId: tools.userId
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: add-whitelisted-ips
+      description: Add one or more IP addresses to the proxy authentication whitelist
+      hints:
+        readOnly: false
+        idempotent: true
+      call: smartproxy.add-whitelisted-ips
+      with:
+        userId: tools.userId
+        ip_addresses: tools.ip_addresses
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: remove-whitelisted-ip
+      description: Remove an IP address from the proxy authentication whitelist
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: smartproxy.delete-whitelisted-ip
+      with:
+        userId: tools.userId
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-subscriptions
+      description: Get active subscription plans, traffic limits, and validity dates
+      hints:
+        readOnly: true
+        openWorld: false
+      call: smartproxy.get-subscriptions
+      with:
+        userId: tools.userId
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: list-proxy-endpoints
+      description: List all available proxy endpoints with hostnames, ports, and protocols
+      hints:
+        readOnly: true
+        openWorld: true
+      call: smartproxy.get-endpoints
+      outputParameters:
+      - type: array
+        mapping: $.
+    - name: list-proxy-endpoints-by-type
+      description: Get proxy endpoints filtered by connection type (random, sticky, datacenter, mobile)
+      hints:
+        readOnly: true
+        openWorld: true
+      call: smartproxy.get-endpoints-by-type
+      with:
+        type: tools.type
+      outputParameters:
+      - type: array
+        mapping: $.
