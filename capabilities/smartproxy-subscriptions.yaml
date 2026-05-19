@@ -1,0 +1,81 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Smartproxy API — Subscriptions
+  description: 'Smartproxy API — Subscriptions. 1 operations. Lead operation: Get Subscriptions. Self-contained Naftiko capability
+    covering one Smartproxy business surface.'
+  tags:
+  - Smartproxy
+  - Subscriptions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SMARTPROXY_API_KEY: SMARTPROXY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: smartproxy-subscriptions
+    baseUri: https://api.decodo.com/v1
+    description: Smartproxy API — Subscriptions business capability. Self-contained, no shared references.
+    resources:
+    - name: users-userId-subscriptions
+      path: /users/{userId}/subscriptions
+      operations:
+      - name: getsubscriptions
+        method: GET
+        description: Get Subscriptions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.SMARTPROXY_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: smartproxy-subscriptions-rest
+    port: 8080
+    description: REST adapter for Smartproxy API — Subscriptions. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/users/{userid}/subscriptions
+      name: users-userid-subscriptions
+      description: REST surface for users-userId-subscriptions.
+      operations:
+      - method: GET
+        name: getsubscriptions
+        description: Get Subscriptions
+        call: smartproxy-subscriptions.getsubscriptions
+        with:
+          userId: rest.userId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: smartproxy-subscriptions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Smartproxy API — Subscriptions. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: get-subscriptions
+      description: Get Subscriptions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: smartproxy-subscriptions.getsubscriptions
+      with:
+        userId: tools.userId
+      outputParameters:
+      - type: object
+        mapping: $.

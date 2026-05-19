@@ -1,0 +1,170 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Smartproxy API — Whitelisted IPs
+  description: 'Smartproxy API — Whitelisted IPs. 3 operations. Lead operation: Get Whitelisted IPs. Self-contained Naftiko
+    capability covering one Smartproxy business surface.'
+  tags:
+  - Smartproxy
+  - Whitelisted IPs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SMARTPROXY_API_KEY: SMARTPROXY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: smartproxy-whitelisted-ips
+    baseUri: https://api.decodo.com/v1
+    description: Smartproxy API — Whitelisted IPs business capability. Self-contained, no shared references.
+    resources:
+    - name: users-userId-whitelisted-ips
+      path: /users/{userId}/whitelisted-ips
+      operations:
+      - name: getwhitelistedips
+        method: GET
+        description: Get Whitelisted IPs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+      - name: addwhitelistedips
+        method: POST
+        description: Add Whitelisted IPs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: users-userId-whitelisted-ips-id
+      path: /users/{userId}/whitelisted-ips/{id}
+      operations:
+      - name: deletewhitelistedip
+        method: DELETE
+        description: Delete Whitelisted IP
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: userId
+          in: path
+          type: string
+          required: true
+        - name: id
+          in: path
+          type: string
+          description: Whitelisted IP record ID
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.SMARTPROXY_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: smartproxy-whitelisted-ips-rest
+    port: 8080
+    description: REST adapter for Smartproxy API — Whitelisted IPs. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/users/{userid}/whitelisted-ips
+      name: users-userid-whitelisted-ips
+      description: REST surface for users-userId-whitelisted-ips.
+      operations:
+      - method: GET
+        name: getwhitelistedips
+        description: Get Whitelisted IPs
+        call: smartproxy-whitelisted-ips.getwhitelistedips
+        with:
+          userId: rest.userId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: addwhitelistedips
+        description: Add Whitelisted IPs
+        call: smartproxy-whitelisted-ips.addwhitelistedips
+        with:
+          userId: rest.userId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{userid}/whitelisted-ips/{id}
+      name: users-userid-whitelisted-ips-id
+      description: REST surface for users-userId-whitelisted-ips-id.
+      operations:
+      - method: DELETE
+        name: deletewhitelistedip
+        description: Delete Whitelisted IP
+        call: smartproxy-whitelisted-ips.deletewhitelistedip
+        with:
+          userId: rest.userId
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: smartproxy-whitelisted-ips-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Smartproxy API — Whitelisted IPs. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-whitelisted-ips
+      description: Get Whitelisted IPs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: smartproxy-whitelisted-ips.getwhitelistedips
+      with:
+        userId: tools.userId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: add-whitelisted-ips
+      description: Add Whitelisted IPs
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: smartproxy-whitelisted-ips.addwhitelistedips
+      with:
+        userId: tools.userId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-whitelisted-ip
+      description: Delete Whitelisted IP
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: smartproxy-whitelisted-ips.deletewhitelistedip
+      with:
+        userId: tools.userId
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.

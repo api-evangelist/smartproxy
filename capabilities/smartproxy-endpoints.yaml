@@ -1,0 +1,114 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Smartproxy API — Endpoints
+  description: 'Smartproxy API — Endpoints. 2 operations. Lead operation: Get Endpoints. Self-contained Naftiko capability
+    covering one Smartproxy business surface.'
+  tags:
+  - Smartproxy
+  - Endpoints
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SMARTPROXY_API_KEY: SMARTPROXY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: smartproxy-endpoints
+    baseUri: https://api.decodo.com/v1
+    description: Smartproxy API — Endpoints business capability. Self-contained, no shared references.
+    resources:
+    - name: endpoints
+      path: /endpoints
+      operations:
+      - name: getendpoints
+        method: GET
+        description: Get Endpoints
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: endpoints-type
+      path: /endpoints/{type}
+      operations:
+      - name: getendpointsbytype
+        method: GET
+        description: Get Endpoints By Type
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: type
+          in: path
+          type: string
+          description: Proxy endpoint type
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.SMARTPROXY_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: smartproxy-endpoints-rest
+    port: 8080
+    description: REST adapter for Smartproxy API — Endpoints. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/endpoints
+      name: endpoints
+      description: REST surface for endpoints.
+      operations:
+      - method: GET
+        name: getendpoints
+        description: Get Endpoints
+        call: smartproxy-endpoints.getendpoints
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/endpoints/{type}
+      name: endpoints-type
+      description: REST surface for endpoints-type.
+      operations:
+      - method: GET
+        name: getendpointsbytype
+        description: Get Endpoints By Type
+        call: smartproxy-endpoints.getendpointsbytype
+        with:
+          type: rest.type
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: smartproxy-endpoints-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Smartproxy API — Endpoints. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-endpoints
+      description: Get Endpoints
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: smartproxy-endpoints.getendpoints
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-endpoints-type
+      description: Get Endpoints By Type
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: smartproxy-endpoints.getendpointsbytype
+      with:
+        type: tools.type
+      outputParameters:
+      - type: object
+        mapping: $.
