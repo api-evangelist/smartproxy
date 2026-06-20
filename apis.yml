@@ -18,7 +18,7 @@ tags:
   - Mobile Proxies
   - Network Infrastructure
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 apis:
   - aid: smartproxy:proxy-management-api
     name: Smartproxy Account Management API
