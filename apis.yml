@@ -43,6 +43,10 @@ apis:
       - type: GitHubRepository
         url: https://github.com/Smartproxy/Smartproxy-API
 common:
+  - type: DomainSecurity
+    url: security/smartproxy-domain-security.yml
+  - type: Authentication
+    url: authentication/smartproxy-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/smartproxy
   - type: Website
@@ -69,6 +73,8 @@ common:
     url: json-ld/smartproxy-context.jsonld
   - type: Vocabulary
     url: vocabulary/smartproxy-vocabulary.yml
+  - url: https://decodo.com/blog
+    type: Blog
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
