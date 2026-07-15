@@ -43,6 +43,8 @@ apis:
       - type: GitHubRepository
         url: https://github.com/Smartproxy/Smartproxy-API
 common:
+  - type: AgenticAccess
+    url: agentic-access/smartproxy-agentic-access.yml
   - type: DomainSecurity
     url: security/smartproxy-domain-security.yml
   - type: Authentication
