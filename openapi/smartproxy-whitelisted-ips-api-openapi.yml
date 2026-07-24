@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: Smartproxy Authentication Whitelisted IPs API
+  description: The Smartproxy API (now also known as Decodo) provides programmatic access to manage proxy accounts, sub-users, traffic limits, IP whitelisting, and endpoint discovery for residential, datacenter, and mobile proxy services. The API enables automated proxy user management, traffic reporting, and endpoint configuration for web data collection at scale.
+  version: 1.0.0
+  termsOfService: https://smartproxy.com/terms-of-service
+  contact:
+    name: Smartproxy Support
+    url: https://help.smartproxy.com/
+  license:
+    name: Smartproxy API License
+    url: https://smartproxy.com/terms-of-service
+servers:
+- url: https://api.decodo.com/v1
+  description: Smartproxy/Decodo API v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Whitelisted IPs
+  description: Manage IP whitelist for proxy authentication
+paths:
+  /users/{userId}/whitelisted-ips:
+    get:
+      operationId: getWhitelistedIps
+      summary: Get Whitelisted IPs
+      description: Lists all IP addresses whitelisted for proxy authentication without credentials.
+      tags:
+      - Whitelisted IPs
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of whitelisted IP addresses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WhitelistedIp'
+    post:
+      operationId: addWhitelistedIps
+      summary: Add Whitelisted IPs
+      description: Adds one or more IP addresses to the proxy authentication whitelist.
+      tags:
+      - Whitelisted IPs
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - IPAddressList
+              properties:
+                IPAddressList:
+                  type: array
+                  items:
+                    type: string
+                  description: List of IP addresses to whitelist
+      responses:
+        '201':
+          description: IPs added to whitelist
+  /users/{userId}/whitelisted-ips/{id}:
+    delete:
+      operationId: deleteWhitelistedIp
+      summary: Delete Whitelisted IP
+      description: Removes an IP address from the proxy authentication whitelist.
+      tags:
+      - Whitelisted IPs
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Whitelisted IP record ID
+      responses:
+        '204':
+          description: IP removed from whitelist
+        '404':
+          description: IP record not found
+components:
+  schemas:
+    WhitelistedIp:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Record ID
+        ip_address:
+          type: string
+          description: Whitelisted IP address
+        created:
+          type: string
+          format: date-time
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key obtained via the /auth endpoint

@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: Smartproxy Authentication API
+  description: The Smartproxy API (now also known as Decodo) provides programmatic access to manage proxy accounts, sub-users, traffic limits, IP whitelisting, and endpoint discovery for residential, datacenter, and mobile proxy services. The API enables automated proxy user management, traffic reporting, and endpoint configuration for web data collection at scale.
+  version: 1.0.0
+  termsOfService: https://smartproxy.com/terms-of-service
+  contact:
+    name: Smartproxy Support
+    url: https://help.smartproxy.com/
+  license:
+    name: Smartproxy API License
+    url: https://smartproxy.com/terms-of-service
+servers:
+- url: https://api.decodo.com/v1
+  description: Smartproxy/Decodo API v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Authentication
+  description: Authenticate and obtain API access tokens
+paths:
+  /auth:
+    post:
+      operationId: authenticate
+      summary: Authenticate
+      description: Authenticates with the Smartproxy API and returns a user ID and token required for subsequent API calls.
+      tags:
+      - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - username
+              - password
+              properties:
+                username:
+                  type: string
+                  description: Smartproxy account username
+                password:
+                  type: string
+                  description: Smartproxy account password
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+components:
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: Authenticated user ID for use in subsequent API calls
+        token:
+          type: string
+          description: API access token
+      required:
+      - user_id
+      - token
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key obtained via the /auth endpoint

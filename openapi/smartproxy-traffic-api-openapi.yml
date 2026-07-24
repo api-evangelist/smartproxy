@@ -1,0 +1,109 @@
+openapi: 3.0.3
+info:
+  title: Smartproxy Authentication Traffic API
+  description: The Smartproxy API (now also known as Decodo) provides programmatic access to manage proxy accounts, sub-users, traffic limits, IP whitelisting, and endpoint discovery for residential, datacenter, and mobile proxy services. The API enables automated proxy user management, traffic reporting, and endpoint configuration for web data collection at scale.
+  version: 1.0.0
+  termsOfService: https://smartproxy.com/terms-of-service
+  contact:
+    name: Smartproxy Support
+    url: https://help.smartproxy.com/
+  license:
+    name: Smartproxy API License
+    url: https://smartproxy.com/terms-of-service
+servers:
+- url: https://api.decodo.com/v1
+  description: Smartproxy/Decodo API v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Traffic
+  description: Monitor and control proxy traffic usage
+paths:
+  /users/{userId}/sub-users/{username}/traffic:
+    get:
+      operationId: getSubUserTraffic
+      summary: Get Sub-User Traffic
+      description: Retrieves traffic usage metrics for a specific sub-user.
+      tags:
+      - Traffic
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Sub-user username
+      responses:
+        '200':
+          description: Traffic usage data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficUsage'
+        '404':
+          description: Sub-user not found
+  /users/{userId}/allocated-traffic:
+    get:
+      operationId: getAllocatedTraffic
+      summary: Get Allocated Traffic
+      description: Retrieves the total allocated traffic across all sub-users for the residential subscription.
+      tags:
+      - Traffic
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Allocated traffic summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllocatedTraffic'
+components:
+  schemas:
+    TrafficUsage:
+      type: object
+      properties:
+        username:
+          type: string
+        traffic_used:
+          type: number
+          description: Data consumed in GB
+        traffic_limit:
+          type: number
+          description: Allocated data limit in GB
+        requests_count:
+          type: integer
+          description: Total number of proxy requests made
+        period_start:
+          type: string
+          format: date
+        period_end:
+          type: string
+          format: date
+    AllocatedTraffic:
+      type: object
+      properties:
+        total_allocated:
+          type: number
+          description: Total GB allocated across all sub-users
+        total_used:
+          type: number
+          description: Total GB consumed across all sub-users
+        sub_user_count:
+          type: integer
+          description: Number of active sub-users
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key obtained via the /auth endpoint

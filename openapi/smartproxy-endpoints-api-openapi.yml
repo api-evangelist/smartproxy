@@ -1,0 +1,100 @@
+openapi: 3.0.3
+info:
+  title: Smartproxy Authentication Endpoints API
+  description: The Smartproxy API (now also known as Decodo) provides programmatic access to manage proxy accounts, sub-users, traffic limits, IP whitelisting, and endpoint discovery for residential, datacenter, and mobile proxy services. The API enables automated proxy user management, traffic reporting, and endpoint configuration for web data collection at scale.
+  version: 1.0.0
+  termsOfService: https://smartproxy.com/terms-of-service
+  contact:
+    name: Smartproxy Support
+    url: https://help.smartproxy.com/
+  license:
+    name: Smartproxy API License
+    url: https://smartproxy.com/terms-of-service
+servers:
+- url: https://api.decodo.com/v1
+  description: Smartproxy/Decodo API v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Endpoints
+  description: Discover available proxy endpoints and ports
+paths:
+  /endpoints:
+    get:
+      operationId: getEndpoints
+      summary: Get Endpoints
+      description: Lists all available proxy endpoints with their connection details.
+      tags:
+      - Endpoints
+      responses:
+        '200':
+          description: List of proxy endpoints
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProxyEndpoint'
+  /endpoints/{type}:
+    get:
+      operationId: getEndpointsByType
+      summary: Get Endpoints By Type
+      description: Retrieves proxy endpoints filtered by connection type. Types include random (rotating) and sticky (session-persistent) proxies.
+      tags:
+      - Endpoints
+      parameters:
+      - name: type
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - random
+          - sticky
+          - datacenter
+          - mobile
+        description: Proxy endpoint type
+      responses:
+        '200':
+          description: Filtered proxy endpoints
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProxyEndpoint'
+components:
+  schemas:
+    ProxyEndpoint:
+      type: object
+      properties:
+        host:
+          type: string
+          description: Proxy hostname or IP address
+        port:
+          type: integer
+          description: Proxy port number
+        type:
+          type: string
+          enum:
+          - random
+          - sticky
+          - datacenter
+          - mobile
+          description: Connection type
+        location:
+          type: string
+          description: Geographic location (country code or city)
+        protocol:
+          type: string
+          enum:
+          - HTTP
+          - HTTPS
+          - SOCKS5
+          description: Supported proxy protocol
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key obtained via the /auth endpoint

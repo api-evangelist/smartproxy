@@ -1,0 +1,200 @@
+openapi: 3.0.3
+info:
+  title: Smartproxy Authentication Sub-Users API
+  description: The Smartproxy API (now also known as Decodo) provides programmatic access to manage proxy accounts, sub-users, traffic limits, IP whitelisting, and endpoint discovery for residential, datacenter, and mobile proxy services. The API enables automated proxy user management, traffic reporting, and endpoint configuration for web data collection at scale.
+  version: 1.0.0
+  termsOfService: https://smartproxy.com/terms-of-service
+  contact:
+    name: Smartproxy Support
+    url: https://help.smartproxy.com/
+  license:
+    name: Smartproxy API License
+    url: https://smartproxy.com/terms-of-service
+servers:
+- url: https://api.decodo.com/v1
+  description: Smartproxy/Decodo API v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Sub-Users
+  description: Manage proxy sub-user accounts
+paths:
+  /users/{userId}/sub-users:
+    get:
+      operationId: getSubUsers
+      summary: Get Sub-Users
+      description: Retrieves all proxy sub-user accounts for the specified user.
+      tags:
+      - Sub-Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Primary account user ID
+      responses:
+        '200':
+          description: List of sub-users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubUser'
+        '401':
+          description: Unauthorized
+    post:
+      operationId: createSubUser
+      summary: Create Sub-User
+      description: Creates a new proxy sub-user account for residential or datacenter proxy services.
+      tags:
+      - Sub-Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubUserRequest'
+      responses:
+        '201':
+          description: Sub-user created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubUser'
+        '400':
+          description: Invalid request
+        '409':
+          description: Username already exists
+    put:
+      operationId: updateSubUser
+      summary: Update Sub-User
+      description: Updates a sub-user account's traffic limits or password.
+      tags:
+      - Sub-Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubUserUpdateRequest'
+      responses:
+        '200':
+          description: Sub-user updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubUser'
+  /users/{userId}/sub-users/{subUserId}:
+    delete:
+      operationId: deleteSubUser
+      summary: Delete Sub-User
+      description: Permanently removes a proxy sub-user account.
+      tags:
+      - Sub-Users
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: subUserId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Sub-user deleted
+        '404':
+          description: Sub-user not found
+components:
+  schemas:
+    SubUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Sub-user unique identifier
+        username:
+          type: string
+          description: Sub-user username for proxy authentication
+        service_type:
+          type: string
+          enum:
+          - residential
+          - datacenter
+          - mobile
+          - isp
+          description: Proxy service type assigned to this sub-user
+        traffic_limit:
+          type: number
+          description: Traffic limit in GB (null for unlimited)
+        traffic_used:
+          type: number
+          description: Traffic consumed in GB
+        status:
+          type: string
+          enum:
+          - active
+          - suspended
+          - deleted
+          description: Account status
+        created:
+          type: string
+          format: date-time
+      required:
+      - username
+      - service_type
+    SubUserRequest:
+      type: object
+      required:
+      - username
+      - password
+      - service_type
+      properties:
+        username:
+          type: string
+          description: Username for proxy authentication
+        password:
+          type: string
+          description: Password for proxy authentication
+        service_type:
+          type: string
+          enum:
+          - residential
+          - datacenter
+          - mobile
+          - isp
+          description: Proxy service type
+        traffic_limit:
+          type: number
+          description: Traffic limit in GB (omit for unlimited)
+    SubUserUpdateRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          description: New password for proxy authentication
+        traffic_limit:
+          type: number
+          description: Updated traffic limit in GB
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key obtained via the /auth endpoint
