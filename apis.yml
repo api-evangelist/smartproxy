@@ -6,6 +6,19 @@ description: >-
   programmatic management of proxy accounts, sub-users, traffic allocation, IP whitelisting, and endpoint discovery. The
   platform supports both rotating and sticky session proxy connections across global geographic locations.
 url: https://raw.githubusercontent.com/api-evangelist/smartproxy/refs/heads/main/apis.yml
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 created: '2026-03-29'
 modified: '2026-05-19'
 specificationVersion: '0.19'
@@ -18,30 +31,98 @@ tags:
   - Mobile Proxies
   - Network Infrastructure
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/smartproxy.png
 apis:
-  - aid: smartproxy:proxy-management-api
-    name: Smartproxy Account Management API
-    description: >-
-      The Smartproxy API provides programmatic access to manage proxy sub-users, monitor traffic consumption, configure
-      IP whitelisting, check subscription status, and discover available proxy endpoints. Base URL:
-      https://api.decodo.com/v1. Authentication via API key token in the Authorization header obtained from the /auth
-      endpoint.
-    humanURL: https://smartproxy.com/
-    tags:
-      - Proxy Management
-      - Sub-Users
-      - Traffic Management
-      - Account Management
-    properties:
-      - type: Documentation
-        url: https://help.smartproxy.com/reference/introduction-1
-      - type: GettingStarted
-        url: https://help.smartproxy.com/docs/quick-start-1
-      - type: OpenAPI
-        url: openapi/smartproxy-openapi.yml
-      - type: GitHubRepository
-        url: https://github.com/Smartproxy/Smartproxy-API
+- aid: smartproxy:smartproxy-authentication-api
+  name: Smartproxy Authentication API
+  description: Authenticate and obtain API access tokens
+  humanURL: https://smartproxy.com/
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/smartproxy-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://help.smartproxy.com/reference/introduction-1
+  - type: GettingStarted
+    url: https://help.smartproxy.com/docs/quick-start-1
+  - type: GitHubRepository
+    url: https://github.com/Smartproxy/Smartproxy-API
+- aid: smartproxy:smartproxy-endpoints-api
+  name: Smartproxy Endpoints API
+  description: Discover available proxy endpoints and ports
+  humanURL: https://smartproxy.com/
+  tags:
+  - Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/smartproxy-endpoints-api-openapi.yml
+  - type: Documentation
+    url: https://help.smartproxy.com/reference/introduction-1
+  - type: GettingStarted
+    url: https://help.smartproxy.com/docs/quick-start-1
+  - type: GitHubRepository
+    url: https://github.com/Smartproxy/Smartproxy-API
+- aid: smartproxy:smartproxy-sub-users-api
+  name: Smartproxy Sub-Users API
+  description: Manage proxy sub-user accounts
+  humanURL: https://smartproxy.com/
+  tags:
+  - Sub-Users
+  properties:
+  - type: OpenAPI
+    url: openapi/smartproxy-sub-users-api-openapi.yml
+  - type: Documentation
+    url: https://help.smartproxy.com/reference/introduction-1
+  - type: GettingStarted
+    url: https://help.smartproxy.com/docs/quick-start-1
+  - type: GitHubRepository
+    url: https://github.com/Smartproxy/Smartproxy-API
+- aid: smartproxy:smartproxy-subscriptions-api
+  name: Smartproxy Subscriptions API
+  description: View subscription details and limits
+  humanURL: https://smartproxy.com/
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/smartproxy-subscriptions-api-openapi.yml
+  - type: Documentation
+    url: https://help.smartproxy.com/reference/introduction-1
+  - type: GettingStarted
+    url: https://help.smartproxy.com/docs/quick-start-1
+  - type: GitHubRepository
+    url: https://github.com/Smartproxy/Smartproxy-API
+- aid: smartproxy:smartproxy-traffic-api
+  name: Smartproxy Traffic API
+  description: Monitor and control proxy traffic usage
+  humanURL: https://smartproxy.com/
+  tags:
+  - Traffic
+  properties:
+  - type: OpenAPI
+    url: openapi/smartproxy-traffic-api-openapi.yml
+  - type: Documentation
+    url: https://help.smartproxy.com/reference/introduction-1
+  - type: GettingStarted
+    url: https://help.smartproxy.com/docs/quick-start-1
+  - type: GitHubRepository
+    url: https://github.com/Smartproxy/Smartproxy-API
+- aid: smartproxy:smartproxy-whitelisted-ips-api
+  name: Smartproxy Whitelisted IPs API
+  description: Manage IP whitelist for proxy authentication
+  humanURL: https://smartproxy.com/
+  tags:
+  - Whitelisted IPs
+  properties:
+  - type: OpenAPI
+    url: openapi/smartproxy-whitelisted-ips-api-openapi.yml
+  - type: Documentation
+    url: https://help.smartproxy.com/reference/introduction-1
+  - type: GettingStarted
+    url: https://help.smartproxy.com/docs/quick-start-1
+  - type: GitHubRepository
+    url: https://github.com/Smartproxy/Smartproxy-API
 common:
   - type: AgenticAccess
     url: agentic-access/smartproxy-agentic-access.yml
