@@ -1,0 +1,24 @@
+{
+  "provider": "smartproxy",
+  "sources": [
+    "smartproxy-authentication-api-openapi.yml",
+    "smartproxy-endpoints-api-openapi.yml",
+    "smartproxy-sub-users-api-openapi.yml",
+    "smartproxy-subscriptions-api-openapi.yml",
+    "smartproxy-traffic-api-openapi.yml",
+    "smartproxy-whitelisted-ips-api-openapi.yml"
+  ],
+  "outputs": [
+    "smartproxy-authentication-api-openapi.yml",
+    "smartproxy-endpoints-api-openapi.yml",
+    "smartproxy-sub-users-api-openapi.yml",
+    "smartproxy-subscriptions-api-openapi.yml",
+    "smartproxy-traffic-api-openapi.yml",
+    "smartproxy-whitelisted-ips-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

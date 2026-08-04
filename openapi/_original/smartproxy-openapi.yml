@@ -1,0 +1,520 @@
+openapi: 3.0.3
+info:
+  title: Smartproxy API
+  description: >-
+    The Smartproxy API (now also known as Decodo) provides programmatic access
+    to manage proxy accounts, sub-users, traffic limits, IP whitelisting, and
+    endpoint discovery for residential, datacenter, and mobile proxy services.
+    The API enables automated proxy user management, traffic reporting, and
+    endpoint configuration for web data collection at scale.
+  version: 1.0.0
+  termsOfService: https://smartproxy.com/terms-of-service
+  contact:
+    name: Smartproxy Support
+    url: https://help.smartproxy.com/
+  license:
+    name: Smartproxy API License
+    url: https://smartproxy.com/terms-of-service
+servers:
+  - url: https://api.decodo.com/v1
+    description: Smartproxy/Decodo API v1
+tags:
+  - name: Authentication
+    description: Authenticate and obtain API access tokens
+  - name: Sub-Users
+    description: Manage proxy sub-user accounts
+  - name: Traffic
+    description: Monitor and control proxy traffic usage
+  - name: Whitelisted IPs
+    description: Manage IP whitelist for proxy authentication
+  - name: Subscriptions
+    description: View subscription details and limits
+  - name: Endpoints
+    description: Discover available proxy endpoints and ports
+security:
+  - ApiKeyAuth: []
+paths:
+  /auth:
+    post:
+      operationId: authenticate
+      summary: Authenticate
+      description: >-
+        Authenticates with the Smartproxy API and returns a user ID and token
+        required for subsequent API calls.
+      tags:
+        - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                  description: Smartproxy account username
+                password:
+                  type: string
+                  description: Smartproxy account password
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+  /users/{userId}/sub-users:
+    get:
+      operationId: getSubUsers
+      summary: Get Sub-Users
+      description: Retrieves all proxy sub-user accounts for the specified user.
+      tags:
+        - Sub-Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Primary account user ID
+      responses:
+        '200':
+          description: List of sub-users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubUser'
+        '401':
+          description: Unauthorized
+    post:
+      operationId: createSubUser
+      summary: Create Sub-User
+      description: Creates a new proxy sub-user account for residential or datacenter proxy services.
+      tags:
+        - Sub-Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubUserRequest'
+      responses:
+        '201':
+          description: Sub-user created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubUser'
+        '400':
+          description: Invalid request
+        '409':
+          description: Username already exists
+    put:
+      operationId: updateSubUser
+      summary: Update Sub-User
+      description: Updates a sub-user account's traffic limits or password.
+      tags:
+        - Sub-Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubUserUpdateRequest'
+      responses:
+        '200':
+          description: Sub-user updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubUser'
+  /users/{userId}/sub-users/{subUserId}:
+    delete:
+      operationId: deleteSubUser
+      summary: Delete Sub-User
+      description: Permanently removes a proxy sub-user account.
+      tags:
+        - Sub-Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: subUserId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Sub-user deleted
+        '404':
+          description: Sub-user not found
+  /users/{userId}/sub-users/{username}/traffic:
+    get:
+      operationId: getSubUserTraffic
+      summary: Get Sub-User Traffic
+      description: Retrieves traffic usage metrics for a specific sub-user.
+      tags:
+        - Traffic
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Sub-user username
+      responses:
+        '200':
+          description: Traffic usage data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrafficUsage'
+        '404':
+          description: Sub-user not found
+  /users/{userId}/allocated-traffic:
+    get:
+      operationId: getAllocatedTraffic
+      summary: Get Allocated Traffic
+      description: >-
+        Retrieves the total allocated traffic across all sub-users for the
+        residential subscription.
+      tags:
+        - Traffic
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Allocated traffic summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllocatedTraffic'
+  /users/{userId}/whitelisted-ips:
+    get:
+      operationId: getWhitelistedIps
+      summary: Get Whitelisted IPs
+      description: Lists all IP addresses whitelisted for proxy authentication without credentials.
+      tags:
+        - Whitelisted IPs
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of whitelisted IP addresses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WhitelistedIp'
+    post:
+      operationId: addWhitelistedIps
+      summary: Add Whitelisted IPs
+      description: Adds one or more IP addresses to the proxy authentication whitelist.
+      tags:
+        - Whitelisted IPs
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [IPAddressList]
+              properties:
+                IPAddressList:
+                  type: array
+                  items:
+                    type: string
+                  description: List of IP addresses to whitelist
+      responses:
+        '201':
+          description: IPs added to whitelist
+  /users/{userId}/whitelisted-ips/{id}:
+    delete:
+      operationId: deleteWhitelistedIp
+      summary: Delete Whitelisted IP
+      description: Removes an IP address from the proxy authentication whitelist.
+      tags:
+        - Whitelisted IPs
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Whitelisted IP record ID
+      responses:
+        '204':
+          description: IP removed from whitelist
+        '404':
+          description: IP record not found
+  /users/{userId}/subscriptions:
+    get:
+      operationId: getSubscriptions
+      summary: Get Subscriptions
+      description: Retrieves the user's active subscription details including plan limits and validity dates.
+      tags:
+        - Subscriptions
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subscription details
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subscription'
+  /endpoints:
+    get:
+      operationId: getEndpoints
+      summary: Get Endpoints
+      description: Lists all available proxy endpoints with their connection details.
+      tags:
+        - Endpoints
+      responses:
+        '200':
+          description: List of proxy endpoints
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProxyEndpoint'
+  /endpoints/{type}:
+    get:
+      operationId: getEndpointsByType
+      summary: Get Endpoints By Type
+      description: >-
+        Retrieves proxy endpoints filtered by connection type. Types include
+        random (rotating) and sticky (session-persistent) proxies.
+      tags:
+        - Endpoints
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [random, sticky, datacenter, mobile]
+          description: Proxy endpoint type
+      responses:
+        '200':
+          description: Filtered proxy endpoints
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProxyEndpoint'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key obtained via the /auth endpoint
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: Authenticated user ID for use in subsequent API calls
+        token:
+          type: string
+          description: API access token
+      required: [user_id, token]
+    SubUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Sub-user unique identifier
+        username:
+          type: string
+          description: Sub-user username for proxy authentication
+        service_type:
+          type: string
+          enum: [residential, datacenter, mobile, isp]
+          description: Proxy service type assigned to this sub-user
+        traffic_limit:
+          type: number
+          description: Traffic limit in GB (null for unlimited)
+        traffic_used:
+          type: number
+          description: Traffic consumed in GB
+        status:
+          type: string
+          enum: [active, suspended, deleted]
+          description: Account status
+        created:
+          type: string
+          format: date-time
+      required: [username, service_type]
+    SubUserRequest:
+      type: object
+      required: [username, password, service_type]
+      properties:
+        username:
+          type: string
+          description: Username for proxy authentication
+        password:
+          type: string
+          description: Password for proxy authentication
+        service_type:
+          type: string
+          enum: [residential, datacenter, mobile, isp]
+          description: Proxy service type
+        traffic_limit:
+          type: number
+          description: Traffic limit in GB (omit for unlimited)
+    SubUserUpdateRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          description: New password for proxy authentication
+        traffic_limit:
+          type: number
+          description: Updated traffic limit in GB
+    TrafficUsage:
+      type: object
+      properties:
+        username:
+          type: string
+        traffic_used:
+          type: number
+          description: Data consumed in GB
+        traffic_limit:
+          type: number
+          description: Allocated data limit in GB
+        requests_count:
+          type: integer
+          description: Total number of proxy requests made
+        period_start:
+          type: string
+          format: date
+        period_end:
+          type: string
+          format: date
+    AllocatedTraffic:
+      type: object
+      properties:
+        total_allocated:
+          type: number
+          description: Total GB allocated across all sub-users
+        total_used:
+          type: number
+          description: Total GB consumed across all sub-users
+        sub_user_count:
+          type: integer
+          description: Number of active sub-users
+    WhitelistedIp:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Record ID
+        ip_address:
+          type: string
+          description: Whitelisted IP address
+        created:
+          type: string
+          format: date-time
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: string
+        plan_name:
+          type: string
+          description: Subscription plan name
+        service_type:
+          type: string
+          enum: [residential, datacenter, mobile, isp]
+        status:
+          type: string
+          enum: [active, expired, cancelled]
+        traffic_limit:
+          type: number
+          description: Total GB included in plan
+        traffic_used:
+          type: number
+          description: Total GB consumed this billing period
+        valid_from:
+          type: string
+          format: date
+        valid_until:
+          type: string
+          format: date
+    ProxyEndpoint:
+      type: object
+      properties:
+        host:
+          type: string
+          description: Proxy hostname or IP address
+        port:
+          type: integer
+          description: Proxy port number
+        type:
+          type: string
+          enum: [random, sticky, datacenter, mobile]
+          description: Connection type
+        location:
+          type: string
+          description: Geographic location (country code or city)
+        protocol:
+          type: string
+          enum: [HTTP, HTTPS, SOCKS5]
+          description: Supported proxy protocol
