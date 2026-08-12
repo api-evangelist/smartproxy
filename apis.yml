@@ -124,6 +124,9 @@ apis:
   - type: GitHubRepository
     url: https://github.com/Smartproxy/Smartproxy-API
 common:
+  - type: License
+    name: MIT
+    url: https://github.com/Smartproxy/Smartproxy-API/blob/master/LICENSE
   - type: AgenticAccess
     url: agentic-access/smartproxy-agentic-access.yml
   - type: DomainSecurity
@@ -141,11 +144,9 @@ common:
   - type: Pricing
     url: https://smartproxy.com/proxies/residential-proxies
   - type: OpenAPI
-    url: openapi/smartproxy-openapi.yml
+    url: openapi/_original/smartproxy-openapi.yml
   - type: Spectral
     url: rules/smartproxy-rules.yml
-  - type: Capabilities
-    url: capabilities/proxy-account-management.yaml
   - type: JSONSchema
     url: json-schema/smartproxy-sub-user-schema.json
   - type: JSONSchema
