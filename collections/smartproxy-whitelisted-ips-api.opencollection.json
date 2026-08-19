@@ -1,0 +1,90 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Smartproxy Authentication Whitelisted IPs API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Whitelisted IPs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Whitelisted IPs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.decodo.com/v1/users/:userId/whitelisted-ips",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Lists all IP addresses whitelisted for proxy authentication without credentials."
+        },
+        {
+          "info": {
+            "name": "Add Whitelisted IPs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.decodo.com/v1/users/:userId/whitelisted-ips",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds one or more IP addresses to the proxy authentication whitelist."
+        },
+        {
+          "info": {
+            "name": "Delete Whitelisted IP",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.decodo.com/v1/users/:userId/whitelisted-ips/:id",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Whitelisted IP record ID"
+              }
+            ]
+          },
+          "docs": "Removes an IP address from the proxy authentication whitelist."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

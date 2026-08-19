@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Smartproxy Authentication Endpoints API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Endpoints",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Endpoints",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.decodo.com/v1/endpoints"
+          },
+          "docs": "Lists all available proxy endpoints with their connection details."
+        },
+        {
+          "info": {
+            "name": "Get Endpoints By Type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.decodo.com/v1/endpoints/:type",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "path",
+                "description": "Proxy endpoint type"
+              }
+            ]
+          },
+          "docs": "Retrieves proxy endpoints filtered by connection type. Types include random (rotating) and sticky (session-persistent) proxies."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

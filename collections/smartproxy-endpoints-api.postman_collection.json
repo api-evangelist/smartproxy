@@ -1,0 +1,223 @@
+{
+  "item": [
+    {
+      "id": "2fdec15b-e416-4765-912f-cf6dd5ba94a6",
+      "name": "Endpoints",
+      "description": {
+        "content": "Discover available proxy endpoints and ports",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "10276c28-980c-4e6e-ae56-5a404c1e9b50",
+          "name": "Get Endpoints",
+          "request": {
+            "name": "Get Endpoints",
+            "description": {
+              "content": "Lists all available proxy endpoints with their connection details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "endpoints"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8b7fc9e2-082d-4c22-8f13-dfac728d6639",
+              "name": "List of proxy endpoints",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"host\": \"string\",\n    \"port\": 2385,\n    \"type\": \"datacenter\",\n    \"location\": \"string\",\n    \"protocol\": \"HTTP\"\n  },\n  {\n    \"host\": \"string\",\n    \"port\": 1017,\n    \"type\": \"mobile\",\n    \"location\": \"string\",\n    \"protocol\": \"HTTPS\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4a1df716-3055-405d-a197-44b1c806c1c1",
+          "name": "Get Endpoints By Type",
+          "request": {
+            "name": "Get Endpoints By Type",
+            "description": {
+              "content": "Retrieves proxy endpoints filtered by connection type. Types include random (rotating) and sticky (session-persistent) proxies.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "endpoints",
+                ":type"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "type",
+                  "description": "(Required) Proxy endpoint type"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b416471d-717e-4493-bd40-f78afc384a29",
+              "name": "Filtered proxy endpoints",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "endpoints",
+                    ":type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "type",
+                      "description": "(Required) Proxy endpoint type"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"host\": \"string\",\n    \"port\": 2385,\n    \"type\": \"datacenter\",\n    \"location\": \"string\",\n    \"protocol\": \"HTTP\"\n  },\n  {\n    \"host\": \"string\",\n    \"port\": 1017,\n    \"type\": \"mobile\",\n    \"location\": \"string\",\n    \"protocol\": \"HTTPS\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.decodo.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b053c241-9e77-4a15-98ee-449a9057c9c6",
+    "name": "Smartproxy Authentication Endpoints API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Smartproxy API (now also known as Decodo) provides programmatic access to manage proxy accounts, sub-users, traffic limits, IP whitelisting, and endpoint discovery for residential, datacenter, and mobile proxy services. The API enables automated proxy user management, traffic reporting, and endpoint configuration for web data collection at scale.\n\nContact Support:\n Name: Smartproxy Support",
+      "type": "text/plain"
+    }
+  }
+}

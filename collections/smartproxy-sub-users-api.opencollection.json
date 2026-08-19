@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Smartproxy Authentication Sub-Users API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sub-Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Sub-Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.decodo.com/v1/users/:userId/sub-users",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path",
+                "description": "Primary account user ID"
+              }
+            ]
+          },
+          "docs": "Retrieves all proxy sub-user accounts for the specified user."
+        },
+        {
+          "info": {
+            "name": "Create Sub-User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.decodo.com/v1/users/:userId/sub-users",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new proxy sub-user account for residential or datacenter proxy services."
+        },
+        {
+          "info": {
+            "name": "Update Sub-User",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.decodo.com/v1/users/:userId/sub-users",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a sub-user account's traffic limits or password."
+        },
+        {
+          "info": {
+            "name": "Delete Sub-User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.decodo.com/v1/users/:userId/sub-users/:subUserId",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "subUserId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Permanently removes a proxy sub-user account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

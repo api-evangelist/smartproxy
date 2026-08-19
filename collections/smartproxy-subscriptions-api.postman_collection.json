@@ -1,0 +1,147 @@
+{
+  "item": [
+    {
+      "id": "5880faf4-d119-47e6-b665-c2a62f2c7f8e",
+      "name": "Subscriptions",
+      "description": {
+        "content": "View subscription details and limits",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c2eb6fec-4cdf-48b0-96a9-2800546724ca",
+          "name": "Get Subscriptions",
+          "request": {
+            "name": "Get Subscriptions",
+            "description": {
+              "content": "Retrieves the user's active subscription details including plan limits and validity dates.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "users",
+                ":userId",
+                "subscriptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "userId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9bb23de1-85aa-47b7-930a-26d4625ddbb7",
+              "name": "Subscription details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "users",
+                    ":userId",
+                    "subscriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "userId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"plan_name\": \"string\",\n    \"service_type\": \"mobile\",\n    \"status\": \"cancelled\",\n    \"traffic_limit\": 84.28072902475049,\n    \"traffic_used\": 6617.243378425962,\n    \"valid_from\": \"1969-05-25\",\n    \"valid_until\": \"1957-11-04\"\n  },\n  {\n    \"id\": \"string\",\n    \"plan_name\": \"string\",\n    \"service_type\": \"datacenter\",\n    \"status\": \"expired\",\n    \"traffic_limit\": 4838.977354253757,\n    \"traffic_used\": 7593.409527900358,\n    \"valid_from\": \"2017-05-23\",\n    \"valid_until\": \"2019-06-12\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.decodo.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "200d9813-d9c8-41d0-a8d7-fd04340458af",
+    "name": "Smartproxy Authentication Subscriptions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Smartproxy API (now also known as Decodo) provides programmatic access to manage proxy accounts, sub-users, traffic limits, IP whitelisting, and endpoint discovery for residential, datacenter, and mobile proxy services. The API enables automated proxy user management, traffic reporting, and endpoint configuration for web data collection at scale.\n\nContact Support:\n Name: Smartproxy Support",
+      "type": "text/plain"
+    }
+  }
+}

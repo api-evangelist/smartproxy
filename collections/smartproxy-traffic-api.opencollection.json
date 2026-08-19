@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Smartproxy Authentication Traffic API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Traffic",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Sub-User Traffic",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.decodo.com/v1/users/:userId/sub-users/:username/traffic",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "Sub-user username"
+              }
+            ]
+          },
+          "docs": "Retrieves traffic usage metrics for a specific sub-user."
+        },
+        {
+          "info": {
+            "name": "Get Allocated Traffic",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.decodo.com/v1/users/:userId/allocated-traffic",
+            "params": [
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieves the total allocated traffic across all sub-users for the residential subscription."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
