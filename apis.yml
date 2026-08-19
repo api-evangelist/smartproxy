@@ -21,7 +21,7 @@ accessModel:
   method: derived
 created: '2026-03-29'
 modified: '2026-05-19'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 tags:
   - Proxies
   - Web Scraping
