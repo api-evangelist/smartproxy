@@ -52,7 +52,8 @@ apis:
   name: Smartproxy Endpoints API
   description: Discover available proxy endpoints and ports
   humanURL: https://smartproxy.com/
-  tags:
+  tags: []
+  tags_raw:
   - Endpoints
   properties:
   - type: OpenAPI
@@ -68,6 +69,8 @@ apis:
   description: Manage proxy sub-user accounts
   humanURL: https://smartproxy.com/
   tags:
+  - Subusers
+  tags_raw:
   - Sub-Users
   properties:
   - type: OpenAPI
@@ -83,6 +86,8 @@ apis:
   description: View subscription details and limits
   humanURL: https://smartproxy.com/
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
