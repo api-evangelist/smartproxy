@@ -6,6 +6,20 @@ description: >-
   programmatic management of proxy accounts, sub-users, traffic allocation, IP whitelisting, and endpoint discovery. The
   platform supports both rotating and sticky session proxy connections across global geographic locations.
 url: https://raw.githubusercontent.com/api-evangelist/smartproxy/refs/heads/main/apis.yml
+deliveryModel:
+  model: open-core
+  license: MIT
+  open_source: true
+  commercial: true
+  callable_host: true
+  label: Open core · an OSS project plus a commercial hosted product
+  confidence: high
+  source:
+  - license
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
@@ -129,6 +143,10 @@ apis:
   - type: GitHubRepository
     url: https://github.com/Smartproxy/Smartproxy-API
 common:
+  - type: IssueTracker
+    url: https://github.com/Smartproxy/Smartproxy-API/issues
+  - type: CodeOfConduct
+    url: https://github.com/Decodo/Decodo-API/blob/master/CODE_OF_CONDUCT.md
   - type: License
     name: MIT
     url: https://github.com/Smartproxy/Smartproxy-API/blob/master/LICENSE
