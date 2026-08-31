@@ -83,7 +83,7 @@ apis:
   description: Manage proxy sub-user accounts
   humanURL: https://smartproxy.com/
   tags:
-  - Subusers
+  - Sub-Users
   tags_raw:
   - Sub-Users
   properties:
