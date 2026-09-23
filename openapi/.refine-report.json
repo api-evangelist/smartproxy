@@ -1,12 +1,7 @@
 {
   "provider": "smartproxy",
   "sources": [
-    "smartproxy-authentication-api-openapi.yml",
-    "smartproxy-endpoints-api-openapi.yml",
-    "smartproxy-sub-users-api-openapi.yml",
-    "smartproxy-subscriptions-api-openapi.yml",
-    "smartproxy-traffic-api-openapi.yml",
-    "smartproxy-whitelisted-ips-api-openapi.yml"
+    "_original/smartproxy-openapi.yml"
   ],
   "outputs": [
     "smartproxy-authentication-api-openapi.yml",
@@ -16,9 +11,23 @@
     "smartproxy-traffic-api-openapi.yml",
     "smartproxy-whitelisted-ips-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "smartproxy-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "superseded outputs removed: smartproxy-subusers-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 6 total)"
+  ],
+  "skipped": [
+    "smartproxy-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartproxy-endpoints-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartproxy-subscriptions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartproxy-subusers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartproxy-traffic-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartproxy-whitelisted-ips-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

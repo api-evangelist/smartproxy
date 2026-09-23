@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Smartproxy Authentication Sub-Users API
+  title: Smartproxy Sub Users API
   description: The Smartproxy API (now also known as Decodo) provides programmatic access to manage proxy accounts, sub-users, traffic limits, IP whitelisting, and endpoint discovery for residential, datacenter, and mobile proxy services. The API enables automated proxy user management, traffic reporting, and endpoint configuration for web data collection at scale.
   version: 1.0.0
   termsOfService: https://smartproxy.com/terms-of-service
@@ -16,7 +16,7 @@ servers:
 security:
 - ApiKeyAuth: []
 tags:
-- name: Sub-Users
+- name: Subusers
   description: Manage proxy sub-user accounts
 paths:
   /users/{userId}/sub-users:
@@ -25,7 +25,7 @@ paths:
       summary: Get Sub-Users
       description: Retrieves all proxy sub-user accounts for the specified user.
       tags:
-      - Sub-Users
+      - Subusers
       parameters:
       - name: userId
         in: path
@@ -49,7 +49,7 @@ paths:
       summary: Create Sub-User
       description: Creates a new proxy sub-user account for residential or datacenter proxy services.
       tags:
-      - Sub-Users
+      - Subusers
       parameters:
       - name: userId
         in: path
@@ -78,7 +78,7 @@ paths:
       summary: Update Sub-User
       description: Updates a sub-user account's traffic limits or password.
       tags:
-      - Sub-Users
+      - Subusers
       parameters:
       - name: userId
         in: path
@@ -104,7 +104,7 @@ paths:
       summary: Delete Sub-User
       description: Permanently removes a proxy sub-user account.
       tags:
-      - Sub-Users
+      - Subusers
       parameters:
       - name: userId
         in: path
@@ -123,6 +123,15 @@ paths:
           description: Sub-user not found
 components:
   schemas:
+    SubUserUpdateRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          description: New password for proxy authentication
+        traffic_limit:
+          type: number
+          description: Updated traffic limit in GB
     SubUser:
       type: object
       properties:
@@ -183,15 +192,6 @@ components:
         traffic_limit:
           type: number
           description: Traffic limit in GB (omit for unlimited)
-    SubUserUpdateRequest:
-      type: object
-      properties:
-        password:
-          type: string
-          description: New password for proxy authentication
-        traffic_limit:
-          type: number
-          description: Updated traffic limit in GB
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
