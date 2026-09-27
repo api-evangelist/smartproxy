@@ -132,6 +132,30 @@ components:
         traffic_limit:
           type: number
           description: Updated traffic limit in GB
+    SubUserRequest:
+      type: object
+      required:
+      - username
+      - password
+      - service_type
+      properties:
+        username:
+          type: string
+          description: Username for proxy authentication
+        password:
+          type: string
+          description: Password for proxy authentication
+        service_type:
+          type: string
+          enum:
+          - residential
+          - datacenter
+          - mobile
+          - isp
+          description: Proxy service type
+        traffic_limit:
+          type: number
+          description: Traffic limit in GB (omit for unlimited)
     SubUser:
       type: object
       properties:
@@ -168,30 +192,6 @@ components:
       required:
       - username
       - service_type
-    SubUserRequest:
-      type: object
-      required:
-      - username
-      - password
-      - service_type
-      properties:
-        username:
-          type: string
-          description: Username for proxy authentication
-        password:
-          type: string
-          description: Password for proxy authentication
-        service_type:
-          type: string
-          enum:
-          - residential
-          - datacenter
-          - mobile
-          - isp
-          description: Proxy service type
-        traffic_limit:
-          type: number
-          description: Traffic limit in GB (omit for unlimited)
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
