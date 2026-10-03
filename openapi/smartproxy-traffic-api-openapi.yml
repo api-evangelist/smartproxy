@@ -69,18 +69,6 @@ paths:
                 $ref: '#/components/schemas/AllocatedTraffic'
 components:
   schemas:
-    AllocatedTraffic:
-      type: object
-      properties:
-        total_allocated:
-          type: number
-          description: Total GB allocated across all sub-users
-        total_used:
-          type: number
-          description: Total GB consumed across all sub-users
-        sub_user_count:
-          type: integer
-          description: Number of active sub-users
     TrafficUsage:
       type: object
       properties:
@@ -101,6 +89,18 @@ components:
         period_end:
           type: string
           format: date
+    AllocatedTraffic:
+      type: object
+      properties:
+        total_allocated:
+          type: number
+          description: Total GB allocated across all sub-users
+        total_used:
+          type: number
+          description: Total GB consumed across all sub-users
+        sub_user_count:
+          type: integer
+          description: Number of active sub-users
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
