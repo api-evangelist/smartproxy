@@ -143,6 +143,12 @@ apis:
   - type: GitHubRepository
     url: https://github.com/Smartproxy/Smartproxy-API
 common:
+  - type: Plans
+    url: plans/smartproxy-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/smartproxy-rate-limits.yml
+  - type: FinOps
+    url: finops/smartproxy-finops.yml
   - type: IssueTracker
     url: https://github.com/Smartproxy/Smartproxy-API/issues
   - type: CodeOfConduct
